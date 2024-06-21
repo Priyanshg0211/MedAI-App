@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -5,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:med_ai/model/chat_message.dart';
 import 'package:med_ai/model/const.dart';
 import 'package:med_ai/screens/introscreen.dart';
+import 'package:lottie/lottie.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -17,43 +19,76 @@ class _HomePageState extends State<HomePage> {
   List<ChatMessage> messages = [];
   final TextEditingController _textController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
+  bool _isGeneratingResponse = false;
+  Timer? _debounce;
+  bool _isPickerActive = false;
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    _scrollController.dispose();
+    _debounce?.cancel();
+    super.dispose();
+  }
 
   void _handleSubmitted(String text) {
     _textController.clear();
     _addMessage(ChatMessage(text: text, isUser: true, textStyle: TextStyle()));
-    APIService.instance.getGeminiResponse(text, callback: _addMessage);
+    _setGeneratingResponse(true);
+    APIService.instance.getGeminiResponse(text, callback: (message) {
+      if (mounted) {
+        _addMessage(message);
+        _setGeneratingResponse(false);
+      }
+    });
+  }
+
+  void _setGeneratingResponse(bool value) {
+    if (mounted) {
+      setState(() {
+        _isGeneratingResponse = value;
+      });
+    }
   }
 
   void _addMessage(ChatMessage message) {
-    setState(() {
-      messages.insert(0, message);
-    });
-    _scrollController.animateTo(
-      0.0,
-      duration: Duration(milliseconds: 300),
-      curve: Curves.easeOut,
-    );
+    if (mounted) {
+      setState(() {
+        messages.insert(0, message);
+      });
+      _scrollController.animateTo(
+        0.0,
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    }
   }
 
   void _sendMediaMessage() async {
-    ImagePicker picker = ImagePicker();
-    XFile? file = await picker.pickImage(source: ImageSource.gallery);
-    if (file != null) {
-      TextStyle messageTextStyle = TextStyle(
-        fontFamily: 'SofiaPro',
-        fontSize: 16,
-        fontWeight: FontWeight.bold,
-        color: Colors.black,
-      );
+    if (_isPickerActive) return;
 
-      _addMessage(ChatMessage(
-        text: "Summarize the medical Report",
-        isUser: true,
-        imageFile: file,
-        textStyle: messageTextStyle,
-      ));
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () async {
+      _isPickerActive = true;
+      try {
+        ImagePicker picker = ImagePicker();
+        XFile? file = await picker.pickImage(source: ImageSource.gallery);
+        if (file != null && mounted) {
+          TextStyle messageTextStyle = TextStyle(
+            fontFamily: 'SofiaPro',
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          );
 
-      const String defaultPrompt = """
+          _addMessage(ChatMessage(
+            text: "Summarize the medical Report",
+            isUser: true,
+            imageFile: file,
+            textStyle: messageTextStyle,
+          ));
+
+          const String defaultPrompt = """
 Please provide a summary of this report as you are analyzing it. Include the following aspects in your summary:
 1. Type of report 
 2. Patient information 
@@ -63,18 +98,26 @@ Please provide a summary of this report as you are analyzing it. Include the fol
 6. Recommended follow-up actions
 7. Overall health status indication based on the report
 8. Overall conclusion of report
-    """;
+          """;
 
-      APIService.instance.getGeminiResponse(defaultPrompt, imageFile: file,
-          callback: (ChatMessage message) {
-        _addMessage(ChatMessage(
-          text: message.text,
-          isUser: false,
-          imageFile: message.imageFile,
-          textStyle: messageTextStyle,
-        ));
-      });
-    }
+          _setGeneratingResponse(true);
+          APIService.instance.getGeminiResponse(defaultPrompt, imageFile: file,
+              callback: (ChatMessage message) {
+            if (mounted) {
+              _addMessage(ChatMessage(
+                text: message.text,
+                isUser: false,
+                imageFile: message.imageFile,
+                textStyle: messageTextStyle,
+              ));
+              _setGeneratingResponse(false);
+            }
+          });
+        }
+      } finally {
+        _isPickerActive = false;
+      }
+    });
   }
 
   @override
@@ -106,33 +149,69 @@ Please provide a summary of this report as you are analyzing it. Include the fol
           ),
         ],
       ),
-      body: RefreshIndicator(
-        onRefresh: _handleRefresh,
-        backgroundColor: Colors.grey[900],
-        color: Colors.white,
-        child: Column(
-          children: [
-            Expanded(
-              child: ListView.builder(
-                reverse: true,
-                controller: _scrollController,
-                itemCount: messages.length,
-                itemBuilder: (context, index) {
-                  return _buildMessageItem(messages[index]);
-                },
+      body: Stack(
+        children: [
+          RefreshIndicator(
+            onRefresh: _handleRefresh,
+            backgroundColor: Colors.grey[900],
+            color: Colors.white,
+            child: Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    reverse: true,
+                    controller: _scrollController,
+                    itemCount: messages.length,
+                    itemBuilder: (context, index) {
+                      return _buildMessageItem(messages[index]);
+                    },
+                  ),
+                ),
+                _buildMessageComposer(),
+              ],
+            ),
+          ),
+          if (_isGeneratingResponse)
+            Center(
+              child: Container(
+                padding: EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.7),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Lottie.asset(
+                      repeat: true,
+                      'assets/image/loader.json', 
+                      width: 150,
+                      height: 150,
+                    ),
+                    SizedBox(height: 16),
+                    Text(
+                      'Generating Report Summary....',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'SofiaPro',
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-            _buildMessageComposer(),
-          ],
-        ),
+        ],
       ),
     );
   }
 
   Future<void> _handleRefresh() async {
-    setState(() {
-      messages.clear();
-    });
+    if (mounted) {
+      setState(() {
+        messages.clear();
+      });
+    }
   }
 
   Widget _buildMessageItem(ChatMessage message) {
@@ -248,12 +327,12 @@ Please provide a summary of this report as you are analyzing it. Include the fol
                   borderSide: BorderSide(
                     color: Colors.white,
                     width: 1.0,
-                  ), // Border color
+                  ),
                 ),
                 contentPadding: EdgeInsets.symmetric(
                   horizontal: 16.0,
                   vertical: 14.0,
-                ), // Padding inside
+                ),
                 prefixIcon: IconButton(
                   icon: Icon(
                     Icons.image,

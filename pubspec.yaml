@@ -80,6 +80,7 @@ flutter:
     - assets/image/medai intro.json
     - assets/image/splashscreen.gif
     - assets/image/Icon.png
+    - assets/image/loader.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
