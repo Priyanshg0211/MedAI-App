@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:med_ai/screens/HomeScreen.dart';
 
 class InstructionPage extends StatefulWidget {
   const InstructionPage({super.key});
@@ -112,8 +113,8 @@ class _InstructionPageState extends State<InstructionPage> {
                   ),
                 ),
                 onPressed: () {
-                  // Navigator.push(context,
-                  //     MaterialPageRoute(builder: (context) => InstructionPage()));
+                   Navigator.push(context,
+                       MaterialPageRoute(builder: (context) => HomePage()));
                 },
                 child: Text(
                   'Get Started',
