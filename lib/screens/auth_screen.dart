@@ -40,8 +40,10 @@ class _AuthScreenState extends State<AuthScreen> {
 
         if (user != null) {
           // Navigate to the HomeScreen or any other screen after successful login
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => HomePage()));
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => HomePage()),
+            (Route<dynamic> route) => false,
+          );
         } else {
           // Handle sign-in failure
           showDialog(

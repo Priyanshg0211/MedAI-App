@@ -32,8 +32,10 @@ class _IntroScreenState extends State<IntroScreen> {
                         borderRadius: BorderRadius.circular(16),
                       )),
                   onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => AuthScreen()));
+                    Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (context) => AuthScreen()),
+                      (Route<dynamic> route) => false,
+                    );
                   },
                   child: Text(
                     'Get Started',
