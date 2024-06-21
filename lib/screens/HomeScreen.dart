@@ -77,36 +77,40 @@ Please provide a summary of this report as you are analyzing it. Include the fol
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+ @override
+Widget build(BuildContext context) {
+  return Scaffold(
+    backgroundColor: Colors.black,
+    appBar: AppBar(
+      automaticallyImplyLeading: false,
       backgroundColor: Colors.black,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.black,
-        centerTitle: true,
-        title: Text(
-          "Med AI",
-          style: TextStyle(
-            fontFamily: 'SofiaPro',
-            fontSize: 20,
-            color: Colors.white,
-            fontWeight: FontWeight.w500,
-          ),
+      centerTitle: true,
+      title: Text(
+        "Med AI",
+        style: TextStyle(
+          fontFamily: 'SofiaPro',
+          fontSize: 20,
+          color: Colors.white,
+          fontWeight: FontWeight.w500,
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.logout),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => IntroScreen()),
-              );
-            },
-          ),
-        ],
       ),
-      body: Column(
+      actions: [
+        IconButton(
+          icon: Icon(Icons.logout),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => IntroScreen()),
+            );
+          },
+        ),
+      ],
+    ),
+    body: RefreshIndicator(
+      onRefresh: _handleRefresh,
+      backgroundColor: Colors.grey[900],
+      color: Colors.white,
+      child: Column(
         children: [
           Expanded(
             child: ListView.builder(
@@ -121,8 +125,16 @@ Please provide a summary of this report as you are analyzing it. Include the fol
           _buildMessageComposer(),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
+
+Future<void> _handleRefresh() async {
+  setState(() {
+    messages.clear();
+  });
+}
+
 
   Widget _buildMessageItem(ChatMessage message) {
     return Container(
