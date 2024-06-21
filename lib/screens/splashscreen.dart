@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:med_ai/screens/Instruction_page.dart';
+import 'package:med_ai/screens/auth_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -31,7 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
       // If user is not authenticated, navigate to the Onboarding screen
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => InstructionPage()),
+        MaterialPageRoute(builder: (context) => AuthScreen()),
       );
     }
   }
