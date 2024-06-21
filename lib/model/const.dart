@@ -10,7 +10,7 @@ class APIService {
   static final APIService instance = APIService();
 
   final String apiKey =
-      'AIzaSyBPHNMjO7zuHXCE3h6Ha-UdwSGoMfmzMWQ'; // Replace with your actual API key
+      'AIzaSyBPHNMjO7zuHXCE3h6Ha-UdwSGoMfmzMWQ';
   final String apiUrl =
       'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent';
 
