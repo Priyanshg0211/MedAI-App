@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:med_ai/screens/Instruction_page.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -70,8 +71,8 @@ class _AuthScreenState extends State<AuthScreen> {
                       borderRadius: BorderRadius.circular(16),
                     )),
                 onPressed: () {
-                  /*  Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => AuthScreen()));*/
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => InstructionPage()));
                 },
                 child: Text(
                   'Login with GitHub',
