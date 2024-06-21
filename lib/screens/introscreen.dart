@@ -10,6 +10,8 @@ class IntroScreen extends StatefulWidget {
 class _IntroScreenState extends State<IntroScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      
+    );
   }
 }
