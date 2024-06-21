@@ -4,6 +4,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:med_ai/model/chat_message.dart';
 import 'package:med_ai/model/const.dart';
+import 'package:med_ai/screens/introscreen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -19,7 +20,7 @@ class _HomePageState extends State<HomePage> {
 
   void _handleSubmitted(String text) {
     _textController.clear();
-    _addMessage(ChatMessage(text: text, isUser: true,textStyle: TextStyle()));
+    _addMessage(ChatMessage(text: text, isUser: true, textStyle: TextStyle()));
     APIService.instance.getGeminiResponse(text, callback: _addMessage);
   }
 
@@ -34,25 +35,25 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
- void _sendMediaMessage() async {
-  ImagePicker picker = ImagePicker();
-  XFile? file = await picker.pickImage(source: ImageSource.gallery);
-  if (file != null) {
-    TextStyle messageTextStyle = TextStyle(
-      fontFamily: 'SofiaPro',
-      fontSize: 16,
-      fontWeight: FontWeight.bold,
-      color: Colors.black, 
-    );
+  void _sendMediaMessage() async {
+    ImagePicker picker = ImagePicker();
+    XFile? file = await picker.pickImage(source: ImageSource.gallery);
+    if (file != null) {
+      TextStyle messageTextStyle = TextStyle(
+        fontFamily: 'SofiaPro',
+        fontSize: 16,
+        fontWeight: FontWeight.bold,
+        color: Colors.black,
+      );
 
-    _addMessage(ChatMessage(
-      text: "Summarize the medical Report",
-      isUser: true,
-      imageFile: file,
-      textStyle: messageTextStyle,
-    ));
+      _addMessage(ChatMessage(
+        text: "Summarize the medical Report",
+        isUser: true,
+        imageFile: file,
+        textStyle: messageTextStyle,
+      ));
 
-    const String defaultPrompt = """
+      const String defaultPrompt = """
 Please provide a summary of this report as you are analyzing it. Include the following aspects in your summary:
 1. Type of report 
 2. Patient information 
@@ -64,17 +65,17 @@ Please provide a summary of this report as you are analyzing it. Include the fol
 8. Overall conclusion of report
     """;
 
-    APIService.instance.getGeminiResponse(defaultPrompt,
-        imageFile: file, callback: (ChatMessage message) {
-      _addMessage(ChatMessage(
-        text: message.text,
-        isUser: false, 
-        imageFile: message.imageFile,
-        textStyle: messageTextStyle, 
-      ));
-    });
+      APIService.instance.getGeminiResponse(defaultPrompt, imageFile: file,
+          callback: (ChatMessage message) {
+        _addMessage(ChatMessage(
+          text: message.text,
+          isUser: false,
+          imageFile: message.imageFile,
+          textStyle: messageTextStyle,
+        ));
+      });
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -155,13 +156,11 @@ Please provide a summary of this report as you are analyzing it. Include the fol
                       styleSheet: MarkdownStyleSheet(
                         p: TextStyle(
                           fontSize: 16,
-                          fontFamily:
-                              'SofiaPro', 
+                          fontFamily: 'SofiaPro',
                         ),
                         strong: TextStyle(
                           fontWeight: FontWeight.w700,
-                          fontFamily:
-                              'SofiaPro', 
+                          fontFamily: 'SofiaPro',
                         ),
                       ),
                     ),
@@ -217,13 +216,13 @@ Please provide a summary of this report as you are analyzing it. Include the fol
                   color: Colors.white54,
                 ),
                 filled: true,
-                fillColor: Colors.grey[900], 
+                fillColor: Colors.grey[900],
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20.0), 
-                  borderSide: BorderSide.none, 
+                  borderRadius: BorderRadius.circular(20.0),
+                  borderSide: BorderSide.none,
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20.0), 
+                  borderRadius: BorderRadius.circular(20.0),
                   borderSide: BorderSide(
                     color: Colors.white,
                     width: 1.0,
