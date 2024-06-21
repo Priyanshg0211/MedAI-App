@@ -38,7 +38,7 @@ Follow these instructions to get a copy of the project up and running on your lo
     - Go to the [Firebase Console](https://console.firebase.google.com/).
     - Create a new project.
     - Add an Android app and/or iOS app to your Firebase project.
-    - Follow the instructions to download the `google-services.json` file for Android and `GoogleService-Info.plist` file for iOS.
+    - Follow the instructions to download the `google-services.json` file for Android.
     - Place the `google-services.json` file in the `android/app` directory.
     - Enable Google sign-in method in the Firebase Authentication section.
 
