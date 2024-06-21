@@ -94,6 +94,17 @@ Please provide a summary of this report as you are analyzing it. Include the fol
             fontWeight: FontWeight.w500,
           ),
         ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => IntroScreen()),
+              );
+            },
+          ),
+        ],
       ),
       body: Column(
         children: [
