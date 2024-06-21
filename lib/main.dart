@@ -4,13 +4,9 @@ import 'package:med_ai/firebase_options.dart';
 import 'package:med_ai/screens/introscreen.dart';
 
 void main() async {
-  // Ensure Widgets are initialized
   WidgetsFlutterBinding.ensureInitialized();
-  // Initialize Firebase
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  runApp(const MyApp());
+  await Firebase.initializeApp();
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {

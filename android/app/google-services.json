@@ -12,7 +12,20 @@
           "package_name": "com.example.med_ai"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "638457499095-mfusrjqrep2g5r5nkp8ifj5qrotvtgri.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.med_ai",
+            "certificate_hash": "3bf94cdc24a1c3f9185b96a7253a79eb290c42db"
+          }
+        },
+        {
+          "client_id": "638457499095-jc0dflqmkai597d28vhhssb89lfs25r6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBxe1BG2KhCFdgZuDJpBrGz4PtSmXOTL74"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "638457499095-jc0dflqmkai597d28vhhssb89lfs25r6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
