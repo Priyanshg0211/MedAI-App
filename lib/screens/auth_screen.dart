@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:med_ai/screens/HomeScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:med_ai/screens/Instruction_page.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({Key? key}) : super(key: key);
@@ -41,7 +41,7 @@ class _AuthScreenState extends State<AuthScreen> {
         if (user != null) {
           // Navigate to the HomeScreen or any other screen after successful login
           Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => HomePage()),
+            MaterialPageRoute(builder: (context) => InstructionPage()),
             (Route<dynamic> route) => false,
           );
         } else {

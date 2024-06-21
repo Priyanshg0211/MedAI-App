@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:med_ai/screens/HomeScreen.dart';
-import 'package:med_ai/screens/introscreen.dart';
+import 'package:med_ai/screens/Instruction_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -26,13 +25,13 @@ class _SplashScreenState extends State<SplashScreen> {
       // If user is already authenticated, navigate to the Home screen directly
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => HomePage()),
+        MaterialPageRoute(builder: (context) => InstructionPage()),
       );
     } else {
       // If user is not authenticated, navigate to the Onboarding screen
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => IntroScreen()),
+        MaterialPageRoute(builder: (context) => InstructionPage()),
       );
     }
   }
