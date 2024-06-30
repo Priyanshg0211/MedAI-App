@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     name: Build & Release Android APK
-    runs-on: ubuntu-latest  # Changed to ubuntu-latest as we're only building for Android
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
