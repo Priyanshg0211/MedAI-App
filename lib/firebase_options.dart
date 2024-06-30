@@ -59,4 +59,5 @@ class DefaultFirebaseOptions {
     projectId: 'medai-81640',
     storageBucket: 'medai-81640.appspot.com',
   );
+
 }

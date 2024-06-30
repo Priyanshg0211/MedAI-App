@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:638457499095:android:51bab454d77f89d18ecf92",
         "android_client_info": {
-          "package_name": "com.example.med_ai"
+          "package_name": "com.company.medai"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "638457499095-mfusrjqrep2g5r5nkp8ifj5qrotvtgri.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.med_ai",
+            "package_name": "com.example.medai",
             "certificate_hash": "3bf94cdc24a1c3f9185b96a7253a79eb290c42db"
           }
         },
