@@ -1,4 +1,4 @@
-name: "Build & Release"
+name: "Build & Release Android APK"
 
 on:
   pull_request:
@@ -8,8 +8,8 @@ on:
 
 jobs:
   build:
-    name: Build & Release
-    runs-on: macos-latest
+    name: Build & Release Android APK
+    runs-on: ubuntu-latest  # Changed to ubuntu-latest as we're only building for Android
     steps:
       - uses: actions/checkout@v4
 
@@ -31,7 +31,7 @@ jobs:
       - name: Cache Flutter dependencies
         uses: actions/cache@v3
         with:
-          path: /Users/runner/hostedtoolcache/flutter
+          path: /opt/hostedtoolcache/flutter
           key: ${{ runner.OS }}-flutter-install-cache-3.19.5
 
       - name: Cache Gradle dependencies
@@ -45,19 +45,9 @@ jobs:
       - name: Build Android APK
         run: flutter build apk --release --split-per-abi
 
-      - name: Build iOS IPA
-        run: |
-          flutter build ios --no-codesign
-          cd build/ios/iphoneos
-          mkdir Payload
-          cd Payload
-          ln -s ../Runner.app
-          cd ..
-          zip -r app.ipa Payload
-
       - name: Push to Releases
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "build/app/outputs/apk/release/*,build/ios/iphoneos/app.ipa"
+          artifacts: "build/app/outputs/apk/release/*.apk"
           tag: v1.0.${{ github.run_number }}
           token: ${{ secrets.TOKEN }}
