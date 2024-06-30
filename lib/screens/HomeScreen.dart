@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage> {
         if (file != null && mounted) {
           TextStyle messageTextStyle = TextStyle(
             fontFamily: 'SofiaPro',
-            fontSize: 16,
+            fontSize: 18,
             fontWeight: FontWeight.bold,
             color: Colors.black,
           );
